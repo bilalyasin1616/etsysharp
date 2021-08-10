@@ -1,10 +1,7 @@
 ﻿using Etsysharp.Entities;
-using Newtonsoft.Json;
 using RestSharp;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace Etsysharp.Services
 {
@@ -16,10 +13,10 @@ namespace Etsysharp.Services
 
         }
 
-        public string GetUserId()
+        public async Task<string> GetUserIdAsync()
         {
-            var request = new RestRequest(_apiUrls.FindAllShopListingDraft("__SELF__","active"));
-            var result = RestClient.Get<EtsyResponseModel<Shop>>(request);
+            var request = new RestRequest(_apiUrls.FindAllShopListingDraft("__SELF__","active"), Method.GET);
+            var result = await RestClient.ExecuteAsync<EtsyResponseModel<Shop>>(request);
             return result.Data.results.FirstOrDefault().user_id.ToString();
         }
     }

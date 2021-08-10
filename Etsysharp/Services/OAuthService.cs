@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Etsysharp.Services
 {
@@ -36,12 +37,13 @@ namespace Etsysharp.Services
                 throw new Exception("Etsy didn't respond with Ok, See inner exception for detail", new Exception(httpResponse.Content));
             }
         }
-        public RequestTokenResponse RequestToken(string callBackUrl, string permissions)
+
+        public async Task<RequestTokenResponse> RequestTokenAsync(string callBackUrl, string permissions)
         {
             restClient.Authenticator = OAuth1Authenticator.ForRequestToken(_consumerKey, _consumerSecret, callBackUrl);
             var request = new RestRequest(ApiUrls.OAuthUrls.requestToken);
             request.AddParameter("scope", permissions);
-            httpResponse = restClient.Execute(request);
+            httpResponse = await restClient.ExecuteAsync(request);
             ProcessResponse();
             NameValueCollection queryString = System.Web.HttpUtility.ParseQueryString(httpResponse.Content);
             return new RequestTokenResponse
@@ -51,12 +53,13 @@ namespace Etsysharp.Services
             };
 
         }
-        public AccessTokenResponse AccessToken(string oAuthToken, string oAuthTokenSecret, string oAuthVerifier)
+
+        public async Task<AccessTokenResponse> AccessTokenAsync(string oAuthToken, string oAuthTokenSecret, string oAuthVerifier)
         {
             restClient.Authenticator = OAuth1Authenticator.ForAccessToken(
             _consumerKey, _consumerSecret, oAuthToken, oAuthTokenSecret, oAuthVerifier);
             RestRequest restRequest = new RestRequest(ApiUrls.OAuthUrls.accessToken, Method.GET);
-            httpResponse = restClient.Execute(restRequest);
+            httpResponse = await restClient.ExecuteAsync(restRequest);
             ProcessResponse();
             NameValueCollection queryString = System.Web.HttpUtility.ParseQueryString(httpResponse.Content);
             return new AccessTokenResponse

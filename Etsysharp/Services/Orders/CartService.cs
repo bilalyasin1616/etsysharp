@@ -1,9 +1,6 @@
 ﻿using Etsysharp.Entities;
-using Newtonsoft.Json;
 using RestSharp;
-using System;
 using System.Collections.Generic;
-using System.Text;
 namespace Etsysharp.Services
 {
     public class CartService : BaseHttpService<object>
@@ -12,10 +9,10 @@ namespace Etsysharp.Services
         {
 
         }
-        public EtsyResponseModel<List<Taxonomy>> GetAllUserCarts(long userid)
+        public async System.Threading.Tasks.Task<EtsyResponseModel<List<Taxonomy>>> GetAllUserCartsAsync(long userid)
         {
-            var request = new RestRequest(ApiUrls.CartUrl.GetAllUserCarts(userid));
-            var response = RestClient.Get<EtsyResponseModel<List<Taxonomy>>>(request);
+            var request = new RestRequest(ApiUrls.CartUrl.GetAllUserCarts(userid), Method.GET);
+            var response = await RestClient.ExecuteAsync<EtsyResponseModel<List<Taxonomy>>>(request);
             CheckResponseSuccess(response);
             return response.Data;
         }

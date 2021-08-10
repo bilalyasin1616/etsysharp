@@ -11,14 +11,14 @@ namespace Etsysharp.Services
         {
 
         }
-        public EtsyList<EtsyReceipt, ReceiptingFilter> GetAllShopReceipts(ReceiptingFilter receiptFilter)
+        public async System.Threading.Tasks.Task<EtsyList<EtsyReceipt, ReceiptingFilter>> GetAllShopReceiptsAsync(ReceiptingFilter receiptFilter)
         {
-            var request = new RestRequest(ApiUrls.ReceiptUrl.GetAllShopReceipts(receiptFilter.ShopIdOrName));
+            var request = new RestRequest(ApiUrls.ReceiptUrl.GetAllShopReceipts(receiptFilter.ShopIdOrName), Method.GET);
             request.AddHeader("content-type", "application/x-www-form-urlencoded");
             request.AddParameter("includes", ApiUrls.ReceiptUrl.Includes);
             request.AddQueryParameter("limit", receiptFilter.Limit.ToString());
             request.AddQueryParameter("offset", receiptFilter.OffSet.ToString());
-            var response = RestClient.Get<EtsyResponseModel<EtsyReceipt>>(request);
+            var response = await RestClient.ExecuteAsync<EtsyResponseModel<EtsyReceipt>>(request);
             CheckResponseSuccess(response);
             return new EtsyList<EtsyReceipt, ReceiptingFilter>(receiptFilter, response.Data.count.GetValueOrDefault(), response.Data.results);
         }

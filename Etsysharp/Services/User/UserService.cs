@@ -1,9 +1,6 @@
 ﻿using Etsysharp.Entities;
-using Newtonsoft.Json;
 using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace Etsysharp.Services
 {
@@ -15,10 +12,10 @@ namespace Etsysharp.Services
 
         }
 
-        public EtsyResponseModel<User> Scopes()
+        public async Task<EtsyResponseModel<User>> ScopesAsync()
         {
-            var request = new RestRequest(UserUrls.OauthScopes());
-            var response = RestClient.Get<EtsyResponseModel<User>>(request);
+            var request = new RestRequest(UserUrls.OauthScopes(), Method.GET);
+            var response = await RestClient.ExecuteAsync<EtsyResponseModel<User>>(request);
             CheckResponseSuccess(response);
             return response.Data;
         }

@@ -1,5 +1,6 @@
 ﻿using Etsysharp.Entities;
 using RestSharp;
+using System.Threading.Tasks;
 
 namespace Etsysharp.Services
 {
@@ -15,43 +16,47 @@ namespace Etsysharp.Services
             _apiUrls = apiUrls;
             RestClient = new RestClient(Urls.baseUrl);
         }
-        public virtual EtsyResponseModel<T> GetAll(string status)
+        public virtual async Task<EtsyResponseModel<T>> GetAllAsync(string status)
         {
-            var request = new RestRequest(_apiUrls.GetAll(status));
-            var response = RestClient.Get<EtsyResponseModel<T>>(request);
+            var request = new RestRequest(_apiUrls.GetAll(status), Method.GET);
+            var response = await RestClient.ExecuteAsync<EtsyResponseModel<T>>(request);
             CheckResponseSuccess(response);
             return response.Data;
         }
-        public virtual EtsyResponseModel<T> Create(T entity)
+
+        public virtual async Task<EtsyResponseModel<T>> CreateAsync(T entity)
         {
-            var request = new RestRequest(_apiUrls.Create());
+            var request = new RestRequest(_apiUrls.Create(), Method.POST);
             request.AddHeader("content-type", "application/x-www-form-urlencoded");
             request.AddObject(entity);
-            var response = RestClient.Post<EtsyResponseModel<T>>(request);
+            var response = await RestClient.ExecuteAsync<EtsyResponseModel<T>>(request);
             CheckResponseSuccess(response);
             return response.Data;
         }
-        public virtual EtsyResponseModel<T> Update(T entity, long id)
+
+        public virtual async Task<EtsyResponseModel<T>> UpdateAsync(T entity, long id)
         {
-            var request = new RestRequest(_apiUrls.Update(id));
+            var request = new RestRequest(_apiUrls.Update(id), Method.PUT);
             request.AddHeader("content-type", "application/x-www-form-urlencoded");
             request.AddObject(entity);
-            var response = RestClient.Put<EtsyResponseModel<T>>(request);
+            var response = await RestClient.ExecuteAsync<EtsyResponseModel<T>>(request);
             CheckResponseSuccess(response);
             return response.Data;
         }
-        public virtual EtsyResponseModel<T> Get(long id)
+
+        public virtual async Task<EtsyResponseModel<T>> GetAsync(long id)
         {
-            var request = new RestRequest(_apiUrls.Get(id));
-            var response = RestClient.Get<EtsyResponseModel<T>>(request);
+            var request = new RestRequest(_apiUrls.Get(id), Method.GET);
+            var response = await RestClient.ExecuteAsync<EtsyResponseModel<T>>(request);
             CheckResponseSuccess(response);
             return response.Data;
         }
-        public virtual EtsyResponseModel<T> Delete(long id)
+
+        public virtual async Task<EtsyResponseModel<T>> DeleteAsync(long id)
         {
-            var request = new RestRequest(_apiUrls.Delete(id));
+            var request = new RestRequest(_apiUrls.Delete(id), Method.DELETE);
             request.AddHeader("content-type", "application/x-www-form-urlencoded");
-            var response = RestClient.Delete<EtsyResponseModel<T>>(request);
+            var response = await RestClient.ExecuteAsync<EtsyResponseModel<T>>(request);
             CheckResponseSuccess(response);
             return response.Data;
         }

@@ -12,10 +12,10 @@ namespace Etsysharp.Services
         {
 
         }
-        public EtsyResponseModel<Country> GetAll()
+        public async System.Threading.Tasks.Task<EtsyResponseModel<Country>> GetAllAsync()
         {
-            var request = new RestRequest(ApiUrls.GetCountries);
-            var response = RestClient.Get<EtsyResponseModel<Country>>(request);
+            var request = new RestRequest(ApiUrls.GetCountries, Method.GET);
+            var response = await RestClient.ExecuteAsync<EtsyResponseModel<Country>>(request);
             CheckResponseSuccess(response);
             return response.Data;
         }

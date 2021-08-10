@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Etsysharp.Services
 {
@@ -16,18 +17,18 @@ namespace Etsysharp.Services
         }
 
 
-        public EtsyResponseModel<Shop> FindAllUserShops()
+        public async Task<EtsyResponseModel<Shop>> FindAllUserShopsAsync()
         {
-            var request = new RestRequest(ShopUrls.FindAllUserShops("__SELF__"));
-            var response = RestClient.Get<EtsyResponseModel<Shop>>(request);
+            var request = new RestRequest(ShopUrls.FindAllUserShops("__SELF__"), Method.GET);
+            var response = await RestClient.ExecuteAsync<EtsyResponseModel<Shop>>(request);
             CheckResponseSuccess(response);
             return response.Data;
         }
 
-        public Shop GetMyShop()
+        public async Task<Shop> GetMyShopAsync()
         {
-            var request = new RestRequest(ShopUrls.Get("__SELF__"));
-            var response = RestClient.Get<EtsyResponseModel<Shop>>(request);
+            var request = new RestRequest(ShopUrls.Get("__SELF__"), Method.GET);
+            var response = await RestClient.ExecuteAsync<EtsyResponseModel<Shop>>(request);
             CheckResponseSuccess(response);
             return response.Data.results.First();
         }
