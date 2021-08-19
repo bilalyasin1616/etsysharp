@@ -12,7 +12,7 @@ namespace Etsysharp.Services
 
         }
 
-        public async Task<EtsyResponseModel<User>> ScopesAsync()
+        public virtual async Task<EtsyResponseModel<User>> ScopesAsync()
         {
             var request = new RestRequest(UserUrls.OauthScopes(), Method.GET);
             var response = await RestClient.ExecuteAsync<EtsyResponseModel<User>>(request);

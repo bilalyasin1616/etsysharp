@@ -8,7 +8,7 @@ namespace Etsysharp.Services
         {
 
         }
-        public async System.Threading.Tasks.Task<EtsyResponseModel<Taxonomy>> GetAllAsync()
+        public virtual async System.Threading.Tasks.Task<EtsyResponseModel<Taxonomy>> GetAllAsync()
         {
             var request = new RestRequest(ApiUrls.GetTaxonomy, Method.GET);
             var response = await RestClient.ExecuteAsync<EtsyResponseModel<Taxonomy>>(request);

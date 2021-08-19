@@ -17,7 +17,7 @@ namespace Etsysharp.Services
         }
 
 
-        public async Task<EtsyResponseModel<Shop>> FindAllUserShopsAsync()
+        public virtual async Task<EtsyResponseModel<Shop>> FindAllUserShopsAsync()
         {
             var request = new RestRequest(ShopUrls.FindAllUserShops("__SELF__"), Method.GET);
             var response = await RestClient.ExecuteAsync<EtsyResponseModel<Shop>>(request);
@@ -25,7 +25,7 @@ namespace Etsysharp.Services
             return response.Data;
         }
 
-        public async Task<Shop> GetMyShopAsync()
+        public virtual async Task<Shop> GetMyShopAsync()
         {
             var request = new RestRequest(ShopUrls.Get("__SELF__"), Method.GET);
             var response = await RestClient.ExecuteAsync<EtsyResponseModel<Shop>>(request);

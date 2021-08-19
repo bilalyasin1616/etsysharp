@@ -17,7 +17,7 @@ namespace Etsysharp.Services
 
         }
 
-        public async Task<EtsyList<EtsyProduct, ListingFilter>> GetAllShopAsync(ListingFilter listFilter)
+        public virtual async Task<EtsyList<EtsyProduct, ListingFilter>> GetAllShopAsync(ListingFilter listFilter)
         {
             var request = new RestRequest(_apiUrls.FindAllShopListingDraft(listFilter.ShopIdOrName, listFilter.Status), Method.GET);
             request.AddParameter("includes", _apiUrls.Includes);
@@ -33,7 +33,7 @@ namespace Etsysharp.Services
             return new EtsyList<EtsyProduct, ListingFilter>(listFilter, response.Data.count.GetValueOrDefault(), response.Data.results);
         }
 
-        public async Task<List<VariantImageProperty>> VariantImagesMapAsync(long listingId)
+        public virtual async Task<List<VariantImageProperty>> VariantImagesMapAsync(long listingId)
         {
             var request = new RestRequest(_apiUrls.getVariantImages(listingId), Method.GET);
             var response = await RestClient.ExecuteAsync<EtsyResponseModel<VariantImageProperty>>(request);
@@ -41,7 +41,7 @@ namespace Etsysharp.Services
             return response.Data.results;
         }
 
-        public async Task<EtsyProduct> GetListingAsync(long id)
+        public virtual async Task<EtsyProduct> GetListingAsync(long id)
         {
             var request = new RestRequest(_apiUrls.Get(id), Method.GET);
             request.AddParameter("includes", _apiUrls.Includes);
@@ -50,7 +50,7 @@ namespace Etsysharp.Services
             return response.Data.results[0];
         }
 
-        public async Task<ListingInventory> GetInventoryAsync(long listingId)
+        public virtual async Task<ListingInventory> GetInventoryAsync(long listingId)
         {
             var request = new RestRequest(_apiUrls.GetInventory(listingId), Method.GET);
             request.AddParameter("write_missing_inventory", 1);
@@ -59,7 +59,7 @@ namespace Etsysharp.Services
             return response.Data.results.First();
         }
 
-        public async Task<EtsyResponseModel<ListingInventory>> UpdateInventoryAsync(EtsyRequestListingInventory inventory, long listing_id)
+        public virtual async Task<EtsyResponseModel<ListingInventory>> UpdateInventoryAsync(EtsyRequestListingInventory inventory, long listing_id)
         {
             var request = new RestRequest(_apiUrls.UpdateInventory(listing_id), Method.PUT);
             request.AddHeader("content-type", "application/x-www-form-urlencoded");
@@ -75,7 +75,7 @@ namespace Etsysharp.Services
             return response.Data;
         }
 
-        public async Task<EtsyResponseModel<ListingAttribute>> GetAttributesAsync(long listing_id)
+        public virtual async Task<EtsyResponseModel<ListingAttribute>> GetAttributesAsync(long listing_id)
         {
             var request = new RestRequest(_apiUrls.GetAttributes(listing_id), Method.GET);
             var response = await RestClient.ExecuteAsync< EtsyResponseModel < ListingAttribute >> (request);
@@ -83,7 +83,7 @@ namespace Etsysharp.Services
             return response.Data;
         }
 
-        public async Task<EtsyResponseModel<ListingAttribute>> UpdateAttributeAsync(ListingAttribute attribute)
+        public virtual async Task<EtsyResponseModel<ListingAttribute>> UpdateAttributeAsync(ListingAttribute attribute)
         {
             var request = new RestRequest(_apiUrls.UpdateAttribute(attribute.listing_id.GetValueOrDefault(), attribute.property_id), Method.PUT);
             request.AddHeader("content-type", "application/x-www-form-urlencoded");
@@ -92,7 +92,7 @@ namespace Etsysharp.Services
             CheckResponseSuccess(response);
             return response.Data;
         }
-        public async Task<EtsyResponseModel<ListingAttribute>> DeleteAttributeAsync(int listing_id, int property_id)
+        public virtual async Task<EtsyResponseModel<ListingAttribute>> DeleteAttributeAsync(int listing_id, int property_id)
         {
             var request = new RestRequest(_apiUrls.DeleteAttribute(listing_id,property_id), Method.DELETE);
             request.AddHeader("content-type", "application/x-www-form-urlencoded");
@@ -100,21 +100,21 @@ namespace Etsysharp.Services
             CheckResponseSuccess(response);
             return response.Data;
         }
-        public async Task<EtsyResponseModel<ListingImage>> GetAllListingImagesAsync(long listingId)
+        public virtual async Task<EtsyResponseModel<ListingImage>> GetAllListingImagesAsync(long listingId)
         {
             var request = new RestRequest(_apiUrls.findAllListingImages(listingId), Method.GET);
             var response = await RestClient.ExecuteAsync<EtsyResponseModel<ListingImage>>(request);
             CheckResponseSuccess(response);
             return response.Data;
         }
-        public async Task<EtsyResponseModel<ListingImage>> DeleteListingImageAsync(long listingId, long imageId)
+        public virtual async Task<EtsyResponseModel<ListingImage>> DeleteListingImageAsync(long listingId, long imageId)
         {
             var request = new RestRequest(_apiUrls.deleteListingImage(listingId, imageId), Method.DELETE);
             var response = await RestClient.ExecuteAsync<EtsyResponseModel<ListingImage>>(request);
             CheckResponseSuccess(response);
             return response.Data;
         }
-        public async Task<EtsyResponseModel<ListingImage>> UploadListingImageAsync (long listingId, byte[] fileBytes)
+        public virtual async Task<EtsyResponseModel<ListingImage>> UploadListingImageAsync (long listingId, byte[] fileBytes)
         {
             var request = new RestRequest(_apiUrls.uploadListingImage(listingId), Method.POST);
             request.AddFileBytes("image", fileBytes, "image", "multipart/form-dataheader");
@@ -122,7 +122,7 @@ namespace Etsysharp.Services
              CheckResponseSuccess(response);
             return response.Data;
         }
-        public async Task<EtsyResponseModel<List<ListingImage>>> UploadListingImageByUrlAsync(long listingId, string image_url)
+        public virtual async Task<EtsyResponseModel<List<ListingImage>>> UploadListingImageByUrlAsync(long listingId, string image_url)
         {
             var request = new RestRequest(_apiUrls.uploadListingImage(listingId), Method.POST);
             WebClient wc = new WebClient();
@@ -132,7 +132,7 @@ namespace Etsysharp.Services
             CheckResponseSuccess(response);
             return response.Data;
         }
-        public async Task<VariationImage> UploadListingInventoryImageByUrlAsync(long listingId,string image_url,long propertyId,long valueId)
+        public virtual async Task<VariationImage> UploadListingInventoryImageByUrlAsync(long listingId,string image_url,long propertyId,long valueId)
         {
             var request = new RestRequest(_apiUrls.uploadListingImage(listingId), Method.POST);
             WebClient wc = new WebClient();
@@ -149,7 +149,7 @@ namespace Etsysharp.Services
                 //image_url = image_url
             };
         }
-        public async Task LinkListingInventoryImagesAsync(long listingId,List<VariationImage> variationImages)
+        public virtual async Task LinkListingInventoryImagesAsync(long listingId,List<VariationImage> variationImages)
         {
             var request = new RestRequest(_apiUrls.updateVariantImages(listingId), Method.POST);
             request.AddObject(new
@@ -159,7 +159,7 @@ namespace Etsysharp.Services
             });
             await RestClient.ExecuteAsync(request);
         }
-        public async Task<EtsyResponseModel<List<ListingImage>>> UpdateVariationImagesAsync(ListingVariationImages listingVariantImages)
+        public virtual async Task<EtsyResponseModel<List<ListingImage>>> UpdateVariationImagesAsync(ListingVariationImages listingVariantImages)
         {
             var request = new RestRequest(_apiUrls.updateVariantImages(listingVariantImages.listing_id), Method.POST);
             request.AddHeader("content-type", "application/x-www-form-urlencoded");
@@ -172,7 +172,7 @@ namespace Etsysharp.Services
             CheckResponseSuccess(response);
             return response.Data;
         }
-        public async Task<EtsyResponseModel<List<EtsyProduct>>> UpdateAsync(EtsyProduct p)
+        public virtual async Task<EtsyResponseModel<List<EtsyProduct>>> UpdateAsync(EtsyProduct p)
         {
             var request = new RestRequest(_apiUrls.Update(p.listing_id), Method.PUT);
             request.AddHeader("content-type", "application/x-www-form-urlencoded");

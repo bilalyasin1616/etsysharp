@@ -4,6 +4,8 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
+
 namespace Etsysharp.Services
 {
     public class CountryService : BaseHttpService<Country>
@@ -12,7 +14,7 @@ namespace Etsysharp.Services
         {
 
         }
-        public async System.Threading.Tasks.Task<EtsyResponseModel<Country>> GetAllAsync()
+        public virtual async Task<EtsyResponseModel<Country>> GetAllAsync()
         {
             var request = new RestRequest(ApiUrls.GetCountries, Method.GET);
             var response = await RestClient.ExecuteAsync<EtsyResponseModel<Country>>(request);

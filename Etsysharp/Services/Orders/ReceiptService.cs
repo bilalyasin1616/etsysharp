@@ -2,6 +2,7 @@
 using Etsysharp.Entities.Filters;
 using RestSharp;
 using System.Dynamic;
+using System.Threading.Tasks;
 
 namespace Etsysharp.Services
 {
@@ -11,7 +12,7 @@ namespace Etsysharp.Services
         {
 
         }
-        public async System.Threading.Tasks.Task<EtsyList<EtsyReceipt, ReceiptingFilter>> GetAllShopReceiptsAsync(ReceiptingFilter receiptFilter)
+        public virtual async Task<EtsyList<EtsyReceipt, ReceiptingFilter>> GetAllShopReceiptsAsync(ReceiptingFilter receiptFilter)
         {
             var request = new RestRequest(ApiUrls.ReceiptUrl.GetAllShopReceipts(receiptFilter.ShopIdOrName), Method.GET);
             request.AddHeader("content-type", "application/x-www-form-urlencoded");

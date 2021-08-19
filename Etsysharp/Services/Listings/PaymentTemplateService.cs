@@ -13,7 +13,7 @@ namespace Etsysharp.Services
 
         }
 
-        public async Task<string> GetUserIdAsync()
+        public virtual async Task<string> GetUserIdAsync()
         {
             var request = new RestRequest(_apiUrls.FindAllShopListingDraft("__SELF__","active"), Method.GET);
             var result = await RestClient.ExecuteAsync<EtsyResponseModel<Shop>>(request);
